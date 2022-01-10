@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+     <script>
+       if ( window.history.replaceState ) {
+  window.history.replaceState( null, null, window.location.href );
+  }
+    document.body.onload = function (){
+           document.getElementById("form").reset()
+    }
+
+
+
+ </script>
+    <style type="text/css">
+    ::-webkit-scrollbar{width:5px;}
+                ::-webkit-scrollbar-track {
+          background:#fff ; 
+        }
+         
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+          background:#C1C1C1; 
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+          background: #555; 
+        }
+
+    </style>
+</head>
+<body class="bg-info">
+<div class="container pt-4">
+    <ul class="list-group w-100">
+        <a href="#" class="list-group-item list-group-item-action active">
+            <i class="fas fa-list-ol"></i> Tasks list
+            <form action="" method="POST"  enctype="multipart/form-data">
+                {%csrf_token%}
+              <div class="row mt-3">
+                <div class="col">
+                  <input type="text" class="form-control" required name="title" placeholder="title">
+                </div>
+                <div class="col">
+                  <input type="text" class="form-control" required name="text" placeholder="text">
+                </div>
+                <div class="col">
+                    <div class="input-group mb-3">
+                     <input type="text" class="form-control" required name="color" placeholder="color">
+                      <div class="input-group-append">
+                        <button class="btn btn-warning"  type="submit">create</button>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            </form>
+        </a>
+        <div style="height:500px; background-color:white; overflow-y:scroll;">
+            {%for todo in todos%}{#|slice:'5' #}
+            <li class="list-group-item d-flex justify-content-between align-items-center border-bottom-0">
+                 {%if todo.done == True%}
+            <div style="position:absolute; width:7px; border-radius:10px; height:35px; background-color:{{todo.color}}; opacity:0.3;"></div>
+              {%elif todo.done == False%}
+            <div style="position:absolute; width:7px; border-radius:10px; height:35px; background-color:{{todo.color}}; opacity:1;"></div>
+              {%endif%}
+                <h2 class="ml-3"><b>{{todo.title}}</b></h2>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center border-top-0">
+
+            <span class="">{{todo.text}}</span>
+            <span class="badge">
+                <a class="bg-primary pt-2 pl-3 pr-3 pb-2  mr-4" href="{% url 'main:updateall' todo.id%}">
+                    <i class="fas fa-edit text-white"></i>
+                </a>
+                <a class="bg-primary pt-2 pl-3 pr-3 pb-2  mr-4" href="{%url 'main:update' todo.id%}">
+                    <i class="fas fa-sync text-white"></i>
+                </a>
+                <a class="btn-primary pt-2 pl-3 pr-3 pb-2 mr-4" href="{%url 'main:done' todo.id%}">
+                   {%if todo.done == True%}
+                    <span>Done</span>
+                    {%elif todo.done == False%}
+                     <i class="fa fa-check"></i>
+                    {%endif%}
+                </a>
+                <a class=" pt-2 pl-3 text-danger pr-3 pb-2" href="{%url 'main:delete' todo.id%}">
+                    <i class="fa fa-trash"></i>
+                </a>
+            </span>
+          </li>
+            {%endfor%}
+        </div>
+
+       <li class="list-group-item d-flex justify-content-between align-items-center">
+            All tasks is {{count}}
+           <span>Done tasks {{done}}</span>
+            <span class="badge">
+                <a class="btn btn-primary" href="{%url 'main:deleteall'%}">
+                    Clear
+                </a>
+            </span>
+        </li>
+    </ul>
+</div>
+</body>
+</html>
